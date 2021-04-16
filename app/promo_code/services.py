@@ -79,3 +79,47 @@ def generate_promo_code(amount: int=1, group="default"):
         )
     
     return codes
+
+
+
+def get_code_group(code: str):
+    """
+    Если указанной код был найден,
+    возвращает: "код существует группа = {group}"
+    Иначе, если код не был найден,
+    пишет: "код не существует"
+
+    Parameters
+    ----------
+    code: str
+        Код, который нужно найти.
+
+    Return
+    ------
+    str
+    """
+
+    # Получаем содержимое json файла, в котором храняться коды
+    try:
+        with open("promo_codes.json", "r") as file:
+            data = json.load(file)
+    # Если файл не был найден или его содержимое пустое,
+    # то создаем новый и записываем туда новые данные
+    except FileNotFoundError:
+        raise FileNotFoundError("File not found")
+    except JSONDecodeError:
+        raise ValueError("File not supported")
+    
+    group = None
+    # Проходимся по каждой группе
+    for object in data["data"]:
+        # Если встречаем одинаковые коды
+        if code in object["codes"]:
+        # Сохраняем название группы
+            group = object["group"]
+            break
+    
+    if group is None:
+        return "код не существует"
+    else:
+        return "код существует группа = {" + group + "}"

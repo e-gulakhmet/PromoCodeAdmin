@@ -8,4 +8,12 @@
         <button type="submit">Создать</button>
     </form>
 
+    {% if codes is not none %}
+        {% for code in codes %}
+            <p>
+                {{ code }}
+            </p>
+        {% endfor %}
+    {% endif %}
+
 {% endblock %}
