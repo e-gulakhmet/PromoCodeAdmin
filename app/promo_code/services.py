@@ -64,7 +64,8 @@ def generate_promo_code(amount: int=1,
                         }
                     ]
                 },
-                file
+                file,
+                ensure_ascii=False
             )
         return codes
 
@@ -89,7 +90,7 @@ def generate_promo_code(amount: int=1,
             {
                 "group": group,
                 "codes": codes
-            },) + "]}"
+            }, ensure_ascii=False) + "]}"
         )
     
     return codes
@@ -124,6 +125,7 @@ def get_code_group(code: str,
         raise FileNotFoundError("File not found")
     except JSONDecodeError:
         raise ValueError("File not supported")
+    print(data)
     
     group = None
     # Проходимся по каждой группе
