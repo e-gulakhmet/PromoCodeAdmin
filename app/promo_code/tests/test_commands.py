@@ -79,20 +79,23 @@ class CommandsTestCase(TestCase):
         except:
             pass
 
+        groups = ["агенства", "агенства", "avtostop", 1]
+        codes = []
         # Создаем файл с кодами
-        generate_promo_code(amount=10, group="агенства", file_path=file_path)
-        generate_promo_code(amount=10, group="агенства", file_path=file_path)
-        codes = generate_promo_code(amount=10, group="avtostop", file_path=file_path)
-        generate_promo_code(amount=10, group=1, file_path=file_path)
+        for g in groups:
+            codes.append(generate_promo_code(amount=5, group=g, file_path=file_path)[0])
 
         out = StringIO()
+
         # Запускаем комманду, которая будет искать код файле
-        call_command('get_code_group',
-                     **{"code": codes[0],
-                        "path": file_path},
-                     stdout=out)
+        for i in range(len(groups)):
+            call_command('get_code_group',
+                         **{"code": codes[i],
+                            "path": file_path},
+                         stdout=out)
+
+            # Проверем, что каждому коду соответствует его группа
+            self.assertIsNotNone(re.search(str(groups[i]), out.getvalue()))
 
         # Удаляем тестовый файл с кодами
         os.remove(file_path)
-
-        self.assertIsNotNone(re.search("avtostop", out.getvalue()))
