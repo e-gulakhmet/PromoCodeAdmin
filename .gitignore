@@ -1,3 +1,4 @@
 venv
 .vscode
 __pycache__
+app/promo_code/tests/codes.json

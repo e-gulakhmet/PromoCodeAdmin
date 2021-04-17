@@ -53,6 +53,9 @@ class CommandsTestCase(TestCase):
             # Добавляем к числу кодов количество кодов этой группы
             codes_count += len(object["codes"])
 
+        # Удаляем тестовый файл с кодами
+        os.remove(file_path)
+
         self.assertEqual(len(groups), 3)
         self.assertEqual(codes_count, 58)
 
