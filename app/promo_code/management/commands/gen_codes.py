@@ -2,6 +2,7 @@ from typing import Union
 from django.core.management.base import BaseCommand
 
 from promo_code.services import generate_promo_code
+from promo_code.apps import PromoCodeConfig
 
 
 class Command(BaseCommand):
@@ -23,7 +24,7 @@ class Command(BaseCommand):
         parser.add_argument("-p",
                             "--path",
                             type=str,
-                            default=None,
+                            default=PromoCodeConfig.promo_codes_file_path,
                             help="Путь к файлу с кодами")
 
 
@@ -32,16 +33,21 @@ class Command(BaseCommand):
         group = kwargs["group"]
         recreate = kwargs["recreate"]
         file_path = kwargs["path"]
+
+        if amount is None :
+            self.stdout.write("Укажите количество кодов: -a <количество>")
+            return
+        if group is None or group == "":
+            self.stdout.write("Укажите группу: -g <группа>")
+            return
+
         try:
             if file_path:
                 codes = generate_promo_code(amount=amount,
                                             group=group,
                                             recreate=recreate,
                                             file_path=file_path)
-            else:
-                codes = generate_promo_code(amount=amount,
-                                            group=group,
-                                            recreate=recreate)
+
         except FileNotFoundError:
             self.stdout.write("Файл не найден, проверьте путь к файлу")
             return

@@ -21,9 +21,11 @@ def generate_promo_code(amount: int=1,
 
     group: int, str
         Название группы, которой будет принадлежать промо код.
+
     file_path: str
         Путь к файлу, в котором будут лежать коды.
-    file_path: bool
+
+    recreate: bool
         Если True, пересоздает файл с кодами.
 
     Returns
@@ -31,6 +33,10 @@ def generate_promo_code(amount: int=1,
     list
         Список с созданными промо кодами.
     """
+
+    assert amount is not None and amount > 0, "Amount must be > 0"
+    assert group is not None and group != "", "Group must be not empty str"
+    assert file_path is not None, "File path must be str, not None"
 
     symbols = "QWERTYUIOPASDFGHJKLZXCVBNMqwertyuiopasdfghjklzxcvbnm1234567890"
 
@@ -110,10 +116,16 @@ def get_code_group(code: str,
     code: str
         Код, который нужно найти.
 
+    file_path: str
+        Путь к файлу, в котором будут лежать коды.
+
     Return
     ------
     str, None
     """
+    
+    assert code is not None, "Code must be str, not None"
+    assert file_path is not None, "File path must be str, not None"
 
     # Получаем содержимое json файла, в котором храняться коды
     try:
@@ -125,7 +137,6 @@ def get_code_group(code: str,
         raise FileNotFoundError("File not found")
     except JSONDecodeError:
         raise ValueError("File not supported")
-    print(data)
     
     group = None
     # Проходимся по каждой группе
