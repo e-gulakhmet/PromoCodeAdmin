@@ -26,19 +26,24 @@ class CommandsTestCase(TestCase):
         except:
             pass
 
+        out = StringIO()
         # Запускаем команды
         call_command('gen_codes',**{"amount": 10,
                                     "group": "агенства",
-                                    "path": file_path})
+                                    "path": file_path},
+                                    stdout=out)
         call_command('gen_codes',**{"amount": 1,
                                     "group": "агенства",
-                                    "path": file_path})
+                                    "path": file_path},
+                                    stdout=out)
         call_command('gen_codes',**{"amount": 42,
                                     "group": "avtostop",
-                                    "path": file_path})
+                                    "path": file_path},
+                                    stdout=out)
         call_command('gen_codes',**{"amount": 5,
                                     "group": 1,
-                                    "path": file_path})
+                                    "path": file_path},
+                                    stdout=out)
 
         
         data = None
@@ -48,7 +53,6 @@ class CommandsTestCase(TestCase):
         groups = []
         codes_count = 0
         for object in data["data"]:
-            print(object)
             # Если название группы есть в списке уже найденных групп
             if object["group"] not in groups:
                 # Если группы нет в списке найденных групп

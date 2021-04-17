@@ -51,8 +51,13 @@ def generate_promo_code(amount: int=1,
 
     # Генерируем рандомные ключи
     codes = []
-    for _ in range(amount):
-        codes.append("".join(random.choices(symbols, k=random.randint(4, 15))))
+    i = 0
+    while i < amount:
+        new_code = "".join(random.choices(symbols, k=random.randint(4, 15)))
+        if new_code in codes:
+            continue
+        codes.append(new_code)
+        i += 1
 
     if recreate:
         logger.debug("Removing old file")
@@ -97,8 +102,6 @@ def generate_promo_code(amount: int=1,
     file_codes = []
     for e in data["data"]:
         file_codes.extend(e["codes"])
-    
-
     
     logger.debug("Checking new codes for repetition")
     i = 0
