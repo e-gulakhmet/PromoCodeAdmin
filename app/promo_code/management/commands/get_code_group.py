@@ -1,7 +1,7 @@
 from typing import Union
 from django.core.management.base import BaseCommand
 
-from promo_code.services import get_code_group
+from ...services import get_code_group
 
 
 class Command(BaseCommand):

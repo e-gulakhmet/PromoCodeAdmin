@@ -4,10 +4,11 @@ import random
 import os
 from typing import Union
 
-from .apps import PromoCodeConfig
 
-
-def generate_promo_code(amount: int=1, group: Union[int, str] = "default"):
+def generate_promo_code(amount: int=1,
+                        group: Union[int, str]="default",
+                        file_path: str="promo_codes.json",
+                        recreate: bool=False):
     """
     Генерирует рандомные промо коды.
 
@@ -18,6 +19,10 @@ def generate_promo_code(amount: int=1, group: Union[int, str] = "default"):
 
     group: int, str
         Название группы, которой будет принадлежать промо код.
+    file_path: str
+        Путь к файлу, в котором будут лежать коды.
+    file_path: bool
+        Если True, пересоздает файл с кодами.
 
     Returns
     -------
@@ -34,14 +39,20 @@ def generate_promo_code(amount: int=1, group: Union[int, str] = "default"):
     for _ in range(amount):
         codes.append("".join(random.choices(symbols, k=random.randint(4, 15))))
     
+    if recreate:
+        try:
+            os.remove(file_path)
+        except Exception:
+            pass
+
     # Если файл существует, то получаем данные из него
     try:
-        with open(os.path.join(PromoCodeConfig.promo_codes_dir), "r") as file:
+        with open(file_path, "r") as file:
             data = json.load(file)
     # Если файл не был найден или его содержимое пустое,
     # то создаем новый и записываем туда новые данные
     except (FileNotFoundError, JSONDecodeError):
-        with open(PromoCodeConfig.promo_codes_dir, "w") as file:
+        with open(file_path, "w") as file:
             json.dump(
                 {
                     "data": [
@@ -69,8 +80,8 @@ def generate_promo_code(amount: int=1, group: Union[int, str] = "default"):
         codes.append("".join(random.choices(symbols, k=random.randint(4, 15))))
     
     # Загружаем новую группу с кодами в файл
-    with open(PromoCodeConfig.promo_codes_dir, "r+") as file:
-        bytes_count = os.path.getsize(PromoCodeConfig.promo_codes_dir)
+    with open(file_path, "r+") as file:
+        bytes_count = os.path.getsize(file_path)
         file.seek(bytes_count - 2)
         file.write("," + json.dumps(
             {
@@ -83,7 +94,7 @@ def generate_promo_code(amount: int=1, group: Union[int, str] = "default"):
 
 
 
-def get_code_group(code: str):
+def get_code_group(code: str, file_path):
     """
     Если указанный код был найден,
     возвращает навзавние группы.
@@ -102,7 +113,7 @@ def get_code_group(code: str):
 
     # Получаем содержимое json файла, в котором храняться коды
     try:
-        with open(PromoCodeConfig.promo_codes_dir, "r") as file:
+        with open(file_path, "r") as file:
             data = json.load(file)
     # Если файл не был найден или его содержимое пустое,
     # то создаем новый и записываем туда новые данные
