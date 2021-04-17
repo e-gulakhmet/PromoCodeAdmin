@@ -1,3 +1,4 @@
+from os import path
 from typing import Union
 from django.core.management.base import BaseCommand
 
@@ -12,11 +13,21 @@ class Command(BaseCommand):
                             '--code',
                             type=str,
                             help="Код, по которому будет найдена группа")
+        parser.add_argument("-p",
+                            "--path",
+                            type=str,
+                            default=None,
+                            help="Путь к файлу с кодами")
 
 
     def handle(self, *args, **kwargs):
         code = kwargs['code']
-        group = get_code_group(code)
+        path = kwargs["path"]
+        group = None
+        if path:
+            group = get_code_group(code, path)
+        else:
+            group = get_code_group(code)
         if group is None:
             self.stdout.write("код не существует")
             return
