@@ -23,6 +23,7 @@ class Command(BaseCommand):
         parser.add_argument("-p",
                             "--path",
                             type=str,
+                            default=None,
                             help="Путь к файлу с кодами")
 
 
@@ -31,8 +32,17 @@ class Command(BaseCommand):
         group = kwargs["group"]
         recreate = kwargs["recreate"]
         file_path = kwargs["path"]
-        codes = generate_promo_code(amount=amount,
-                                    group=group,
-                                    recreate=recreate,
-                                    file_path=file_path)
+        try:
+            if file_path:
+                codes = generate_promo_code(amount=amount,
+                                            group=group,
+                                            recreate=recreate,
+                                            file_path=file_path)
+            else:
+                codes = generate_promo_code(amount=amount,
+                                            group=group,
+                                            recreate=recreate)
+        except FileNotFoundError:
+            self.stdout.write("Файл не найден, проверьте путь к файлу")
+            return
         self.stdout.write(f"Новые коды: {codes}")

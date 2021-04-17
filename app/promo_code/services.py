@@ -4,10 +4,12 @@ import random
 import os
 from typing import Union
 
+from .apps import PromoCodeConfig
+
 
 def generate_promo_code(amount: int=1,
                         group: Union[int, str]="default",
-                        file_path: str="promo_codes.json",
+                        file_path: str=PromoCodeConfig.promo_codes_file_path,
                         recreate: bool=False):
     """
     Генерирует рандомные промо коды.
@@ -94,7 +96,8 @@ def generate_promo_code(amount: int=1,
 
 
 
-def get_code_group(code: str, file_path):
+def get_code_group(code: str,
+                   file_path: str=PromoCodeConfig.promo_codes_file_path):
     """
     Если указанный код был найден,
     возвращает навзавние группы.

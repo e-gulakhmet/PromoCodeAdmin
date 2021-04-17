@@ -58,4 +58,3 @@ class CommandsTestCase(TestCase):
 
         self.assertEqual(len(groups), 3)
         self.assertEqual(codes_count, 58)
-

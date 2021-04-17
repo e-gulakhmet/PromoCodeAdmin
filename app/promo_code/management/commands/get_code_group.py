@@ -1,7 +1,7 @@
 from typing import Union
 from django.core.management.base import BaseCommand
 
-from ...services import get_code_group
+from promo_code.services import get_code_group
 
 
 class Command(BaseCommand):
@@ -19,4 +19,5 @@ class Command(BaseCommand):
         group = get_code_group(code)
         if group is None:
             self.stdout.write("код не существует")
+            return
         self.stdout.write("код существует группа = {%s}" % group)
