@@ -85,10 +85,10 @@ def generate_promo_code(amount: int=1, group: Union[int, str] = "default"):
 
 def get_code_group(code: str):
     """
-    Если указанной код был найден,
-    возвращает навзавние группы
+    Если указанный код был найден,
+    возвращает навзавние группы.
     Иначе, если код не был найден,
-    возварает None
+    возварает None.
 
     Parameters
     ----------
@@ -102,7 +102,7 @@ def get_code_group(code: str):
 
     # Получаем содержимое json файла, в котором храняться коды
     try:
-        with open("promo_codes.json", "r") as file:
+        with open(PromoCodeConfig.promo_codes_dir, "r") as file:
             data = json.load(file)
     # Если файл не был найден или его содержимое пустое,
     # то создаем новый и записываем туда новые данные

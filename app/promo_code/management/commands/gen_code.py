@@ -5,7 +5,7 @@ from promo_code.services import generate_promo_code
 
 
 class Command(BaseCommand):
-    help = "Генерирует ноыве промо коды и сохраняет их"
+    help = "Генерирует ноыве промо коды и сохраняет их."
 
     def add_arguments(self, parser):
         parser.add_argument('-a',
@@ -23,6 +23,4 @@ class Command(BaseCommand):
         amount = kwargs['amount']
         group = kwargs['group']
         codes = generate_promo_code(amount, group)
-        self.stdout.write(u'Новые коды: %s' % codes)
-
-        
+        self.stdout.write(f"Новые коды: {codes}")
