@@ -2,11 +2,12 @@ import json
 from json.decoder import JSONDecodeError
 import random
 import os
+from typing import Union
 
 from .apps import PromoCodeConfig
 
 
-def generate_promo_code(amount: int=1, group="default"):
+def generate_promo_code(amount: int=1, group: Union[int, str] = "default"):
     """
     Генерирует рандомные промо коды.
 
@@ -85,9 +86,9 @@ def generate_promo_code(amount: int=1, group="default"):
 def get_code_group(code: str):
     """
     Если указанной код был найден,
-    возвращает: "код существует группа = {group}"
+    возвращает навзавние группы
     Иначе, если код не был найден,
-    пишет: "код не существует"
+    возварает None
 
     Parameters
     ----------
@@ -96,7 +97,7 @@ def get_code_group(code: str):
 
     Return
     ------
-    str
+    str, None
     """
 
     # Получаем содержимое json файла, в котором храняться коды
@@ -120,6 +121,6 @@ def get_code_group(code: str):
             break
     
     if group is None:
-        return "код не существует"
-    else:
-        return "код существует группа = {" + group + "}"
+        return None
+
+    return group
