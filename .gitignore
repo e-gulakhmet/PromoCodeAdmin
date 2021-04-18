@@ -3,4 +3,4 @@ venv
 __pycache__
 app/promo_code/tests/codes.json
 app/promo_code/data/promo_codes.json
-logging.log
+logs.log

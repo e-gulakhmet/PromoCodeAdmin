@@ -117,13 +117,13 @@ LOGGING = {
             'level': 'DEBUG',
             'class': 'logging.FileHandler',
             'formatter': 'file',
-            'filename': os.path.join(BASE_DIR, 'logs/logging.log')
+            'filename': os.path.join(BASE_DIR, 'logs.log')
         },
         'promo_code_file': {
             'level': 'DEBUG',
             'class': 'logging.FileHandler',
             'formatter': 'file',
-            'filename': os.path.join(BASE_DIR, 'promo_code', 'logs/logging.log')
+            'filename': os.path.join(BASE_DIR, 'promo_code', 'logs.log')
         }
     },
     'loggers': {
