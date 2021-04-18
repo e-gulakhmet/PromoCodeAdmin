@@ -105,7 +105,7 @@ def generate_promo_code(amount: int=1,
     for e in data["data"]:
         file_codes.extend(e["codes"])
     
-    logger.debug("Checking new codes for repetition")
+    logger.debug("Checking new codes for repeat")
     i = 0
     # Проверяем сущесвует ли новый промо код в файле.
     while i < len(codes):
@@ -114,7 +114,7 @@ def generate_promo_code(amount: int=1,
             continue
         # Если такой код уже существует,
         # то удаляем этот код, создаем новый и проверяем его.
-        logger.debug("Found a match")
+        logger.debug("Found a repeat")
         codes.pop(i)
         logger.debug("Replace with a new code")
         codes.insert(i, "".join(random.choices(symbols, k=random.randint(4, 15))))
@@ -171,8 +171,6 @@ def get_code_group(code: str, file_path: str):
     try:
         with open(file_path, "r") as file:
             data = json.load(file)
-    # Если файл не был найден или его содержимое пустое,
-    # то создаем новый и записываем туда новые данные
     except FileNotFoundError:
         logger.error("File not found")
         raise FileNotFoundError("File not found")
@@ -280,7 +278,62 @@ def get_code_file_info(file_path: str):
     
     logger.debug(f"Found {len(groups)} and {codes_count} codes")
 
+    if groups is None or codes_count == 0:
+        return None
     return {"groups": len(groups), "codes": codes_count}
 
     
+
+def get_codes_by_group(group: Union[str, int], file_path: str):
+    """
+    Возвращает коды указанной группы
+
+    Parameters
+    ----------
+    group: str, int
+        Группа, коды которой нужно найти
+
+    file_path: str
+        Путь к файлу, в котором будут лежать коды.
+
+    Return
+    ------
+        list, None
+    """
+    
+    assert group is not None and group != "", "Group must be str or int, not None"
+    assert file_path is not None and file_path != "", "File path must be str, not None"
+    assert re.search(".json", file_path), "File must be in json format"
+
+    logger.debug("Getting codes by group")
+    logger.debug(f"Parameters: group={group}")
+
+    # Получаем содержимое json файла, в котором храняться коды
+    logger.debug(f"Retrieving data from file({file_path})")
+    try:
+        with open(file_path, "r") as file:
+            data = json.load(file)
+    except FileNotFoundError:
+        logger.error("File not found")
+        raise FileNotFoundError("File not found")
+    except JSONDecodeError:
+        logger.error("File not supported")
+        raise ValueError("File not supported")
+
+    logger.debug("Got data from file")
+    
+    # Ищем коды группы в данных файла
+    logger.debug("Searching codes by group")
+    codes = []
+    for object in data["data"]:
+        if group == object["group"]:
+        # Сохраняем название группы
+            codes.extend(object["codes"])
+            continue
+    
+    if len(codes) == 0:
+        logger.debug(f"Group {group} not found")
+        return None
+    logger.debug(f"Found codes: {codes}")
+    return codes
 

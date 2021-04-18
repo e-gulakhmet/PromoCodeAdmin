@@ -1,4 +1,5 @@
 from typing import Union
+
 from django.core.management.base import BaseCommand
 
 from promo_code.services import generate_promo_code
@@ -15,7 +16,7 @@ class Command(BaseCommand):
                             help="Количество новых кодов")
         parser.add_argument("-g",
                             "--group",
-                            type=str,
+                            type=Union[str, int],
                             help="Название группы, для которой будут созданы промокоды")
         parser.add_argument("-r",
                             "--recreate",
