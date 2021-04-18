@@ -1,34 +1,26 @@
 from django.core.management.base import BaseCommand
 
-from promo_code.services import get_code_group
-from promo_code.apps import PromoCodeConfig
+from promo_code.services import get_code_file_info
 
 
 class Command(BaseCommand):
     help = "Ищет группу по указанному коду."
 
     def add_arguments(self, parser):
-        parser.add_argument('-c',
-                            '--code',
-                            type=str,
-                            help="Код, по которому будет найдена группа")
         parser.add_argument("-p",
                             "--path",
                             type=str,
-                            default=PromoCodeConfig.promo_codes_file_path,
                             help="Путь к файлу с кодами")
 
 
     def handle(self, *args, **kwargs):
-        code = kwargs['code']
         path = kwargs["path"]
 
-        if code is None or code == "" :
-            self.stdout.write("Укажите код: -с <код>")
+        if path is None or path == "" :
+            self.stdout.write("Укажите путь: -p <путь к файлу>")
             return
-
         try:
-            group = get_code_group(code, path)
+            info = get_code_file_info(path)
         except FileNotFoundError:
             self.stdout.write("Файл не найден")
             self.stdout.write("Проверьте путь к файлу")
@@ -40,8 +32,10 @@ class Command(BaseCommand):
         except AssertionError:
             self.stdout.write("Неверно указаны параметры комманды")
             return
-
-        if group is None:
-            self.stdout.write("код не существует")
+        
+        if info is None:            
+            self.stdout.write("Не удалось получить данные о файле")
+            self.stdout.write("Проверьте содержимое")
             return
-        self.stdout.write("код существует группа = {%s}" % group)
+        self.stdout.write(f"В файле {info['groups']} групп, {info['codes']} промо кодов")
+        

@@ -42,6 +42,7 @@ def generate_promo_code(amount: int=1,
     assert amount is not None and amount > 0, "Amount must be > 0"
     assert group is not None and group != "", "Group must be not empty str"
     assert file_path is not None and file_path != "", "File path must be str, not None"
+    assert re.search(".json", file_path), "File must be in json format"
 
     logger.debug(f"Generating new codes")
     logger.debug(f"Parameters: amount={amount}, group={group}, recreate={recreate}")
@@ -138,8 +139,7 @@ def generate_promo_code(amount: int=1,
 
 
 
-def get_code_group(code: str,
-                   file_path: str=PromoCodeConfig.promo_codes_file_path):
+def get_code_group(code: str, file_path: str):
     """
     Если указанный код был найден,
     возвращает навзавние группы.
@@ -161,6 +161,7 @@ def get_code_group(code: str,
     
     assert code is not None, "Code must be str, not None"
     assert file_path is not None and file_path != "", "File path must be str, not None"
+    assert re.search(".json", file_path), "File must be in json format"
 
     logger.debug("Getting code gruop")
     logger.debug(f"Parameters: code={code}")
@@ -207,7 +208,7 @@ def remove_code_file(file_path: str):
     Parameters
     ----------
     file_path: str
-        Путь к файлу, который нужно удалить
+        Путь к файлу, который нужно удалить.
     """
 
     assert file_path is not None and file_path != "", "File path must be str, not None"
@@ -225,3 +226,61 @@ def remove_code_file(file_path: str):
         raise Exception(e)
 
     logger.debug("File removed")
+
+
+
+def get_code_file_info(file_path: str):
+    """
+    Возвращает информацию о файле с кодами.
+
+    Parameters
+    ----------
+    file_path: str
+        Путь к файлу, который нужно изучить.
+    
+    Return
+    ------
+    dict
+        {
+            "groups": количество групп,
+            "codes": количество кодов
+        }
+    """
+
+    assert file_path is not None and file_path != "", "File path must be str, not None"
+    assert re.search(".json", file_path), "File must be in json format"
+
+    logger.debug(f"Getting info from code file({file_path})")
+
+    logger.debug("Retrieving data from the old file")
+    try:
+        with open(file_path, "r") as file:
+            data = json.load(file)
+    except FileNotFoundError:
+        logger.error("File not found")
+        raise FileNotFoundError("File not found")
+    except JSONDecodeError:
+        logger.error("File not supported")
+        raise ValueError("File not supported")
+
+    logger.debug("Got data from file")
+
+    # Считаем количество групп и количество
+    # кодов в полученных данных
+    groups = []
+    codes_count = 0
+    for object in data["data"]:
+        # Если название группы есть в списке уже найденных групп
+        if object["group"] not in groups:
+            # Если группы нет в списке найденных групп
+            # Добавляем ее в этот список
+            groups.append(object["group"])
+        # Добавляем к числу кодов количество кодов этой группы
+        codes_count += len(object["codes"])
+    
+    logger.debug(f"Found {len(groups)} and {codes_count} codes")
+
+    return {"groups": len(groups), "codes": codes_count}
+
+    
+
