@@ -26,24 +26,19 @@ class CommandsTestCase(TestCase):
         except:
             pass
 
-        out = StringIO()
         # Запускаем команды
         call_command('gen_codes',**{"amount": 10,
                                     "group": "агенства",
-                                    "path": file_path},
-                                    stdout=out)
+                                    "path": file_path})
         call_command('gen_codes',**{"amount": 1,
                                     "group": "агенства",
-                                    "path": file_path},
-                                    stdout=out)
+                                    "path": file_path})
         call_command('gen_codes',**{"amount": 42,
                                     "group": "avtostop",
-                                    "path": file_path},
-                                    stdout=out)
+                                    "path": file_path})
         call_command('gen_codes',**{"amount": 5,
                                     "group": 1,
-                                    "path": file_path},
-                                    stdout=out)
+                                    "path": file_path})
 
         
         data = None

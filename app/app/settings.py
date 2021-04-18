@@ -129,7 +129,8 @@ LOGGING = {
     'loggers': {
         '': {
             'level': 'DEBUG',
-            'handlers': ['file']
+            'handlers': ['file'],
+            'propagate': True
         },
         'django.request': {
             'level': 'DEBUG',
@@ -141,7 +142,8 @@ LOGGING = {
         },
         'promo_code.services': {
             'level': 'DEBUG',
-            'handlers': ['promo_code_file']
+            'handlers': ['promo_code_file'],
+            'propagate': True
         }
     }
 }
