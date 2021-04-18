@@ -24,6 +24,6 @@ class Command(BaseCommand):
             self.stdout.write("Файл не найден, проверьте путь к файлу")
             return
         except AssertionError:
-            self.stdout.write("Неверно указаны параметры комманды")
+            self.stdout.write("Неверно указаны параметры команды")
             return
         self.stdout.write("Removed")

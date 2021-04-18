@@ -38,7 +38,7 @@ class Command(BaseCommand):
             self.stdout.write("Проверьте содержимое файла")
             return
         except AssertionError:
-            self.stdout.write("Неверно указаны параметры комманды")
+            self.stdout.write("Неверно указаны параметры команды")
             return
 
         if group is None:
