@@ -4,6 +4,7 @@ import random
 import os
 from typing import Union
 import logging
+import re
 
 from .apps import PromoCodeConfig
 
@@ -40,7 +41,7 @@ def generate_promo_code(amount: int=1,
 
     assert amount is not None and amount > 0, "Amount must be > 0"
     assert group is not None and group != "", "Group must be not empty str"
-    assert file_path is not None, "File path must be str, not None"
+    assert file_path is not None and file_path != "", "File path must be str, not None"
 
     logger.debug(f"Generating new codes")
     logger.debug(f"Parameters: amount={amount}, group={group}, recreate={recreate}")
@@ -159,7 +160,7 @@ def get_code_group(code: str,
     """
     
     assert code is not None, "Code must be str, not None"
-    assert file_path is not None, "File path must be str, not None"
+    assert file_path is not None and file_path != "", "File path must be str, not None"
 
     logger.debug("Getting code gruop")
     logger.debug(f"Parameters: code={code}")
@@ -196,3 +197,31 @@ def get_code_group(code: str,
 
     logger.debug(f"Found group: {group}")
     return group
+
+
+
+def remove_code_file(file_path: str):
+    """
+    Удаляет файл с кодами
+
+    Parameters
+    ----------
+    file_path: str
+        Путь к файлу, который нужно удалить
+    """
+
+    assert file_path is not None and file_path != "", "File path must be str, not None"
+    assert re.search(".json", file_path), "File must be in json format"
+
+    logger.debug(f"Removing file({file_path})")
+
+    try:
+        os.remove(file_path)
+    except FileNotFoundError:
+        logger.debug("File not found")
+        raise FileNotFoundError("File not found")
+    except Exception as e:
+        logger.debug(f"Failed to remove file: {e}")
+        raise Exception(e)
+
+    logger.debug("File removed")

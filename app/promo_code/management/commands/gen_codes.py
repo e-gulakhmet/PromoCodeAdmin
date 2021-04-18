@@ -6,7 +6,7 @@ from promo_code.apps import PromoCodeConfig
 
 
 class Command(BaseCommand):
-    help = "Генерирует ноыве промо коды и сохраняет их."
+    help = "Генерирует ноыве промо коды и сохраняет их в указанный файл."
 
     def add_arguments(self, parser):
         parser.add_argument("-a",
@@ -42,11 +42,10 @@ class Command(BaseCommand):
             return
 
         try:
-            if file_path:
-                codes = generate_promo_code(amount=amount,
-                                            group=group,
-                                            recreate=recreate,
-                                            file_path=file_path)
+            codes = generate_promo_code(amount=amount,
+                                        group=group,
+                                        recreate=recreate,
+                                        file_path=file_path)
 
         except FileNotFoundError:
             self.stdout.write("Файл не найден, проверьте путь к файлу")
