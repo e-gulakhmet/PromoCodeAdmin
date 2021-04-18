@@ -42,7 +42,7 @@ def generate_promo_code(amount: int=1,
     assert amount is not None and amount > 0, "Amount must be > 0"
     assert group is not None and group != "", "Group must be not empty str"
     assert file_path is not None and file_path != "", "File path must be str, not None"
-    assert re.search(".json", file_path), "File must be in json format"
+    assert re.search(".*\w+.json$", file_path), "File must be in json format"
 
     logger.debug(f"Generating new codes")
     logger.debug(f"Parameters: amount={amount}, group={group}, recreate={recreate}")
@@ -161,7 +161,7 @@ def get_code_group(code: str, file_path: str):
     
     assert code is not None, "Code must be str, not None"
     assert file_path is not None and file_path != "", "File path must be str, not None"
-    assert re.search(".json", file_path), "File must be in json format"
+    assert re.search(".*\w+.json$", file_path), "File must be in json format"
 
     logger.debug("Getting code gruop")
     logger.debug(f"Parameters: code={code}")
@@ -210,7 +210,7 @@ def remove_code_file(file_path: str):
     """
 
     assert file_path is not None and file_path != "", "File path must be str, not None"
-    assert re.search(".json", file_path), "File must be in json format"
+    assert re.search(".*\w+.json$", file_path), "File must be in json format"
 
     logger.debug(f"Removing file({file_path})")
 
@@ -246,7 +246,7 @@ def get_code_file_info(file_path: str):
     """
 
     assert file_path is not None and file_path != "", "File path must be str, not None"
-    assert re.search(".json", file_path), "File must be in json format"
+    assert re.search(".*\w+.json$", file_path), "File must be in json format"
 
     logger.debug(f"Getting info from code file({file_path})")
 
@@ -303,7 +303,7 @@ def get_codes_by_group(group: Union[str, int], file_path: str):
     
     assert group is not None and group != "", "Group must be str or int, not None"
     assert file_path is not None and file_path != "", "File path must be str, not None"
-    assert re.search(".json", file_path), "File must be in json format"
+    assert re.search(".*\w+.json$", file_path), "File must be in json format"
 
     logger.debug("Getting codes by group")
     logger.debug(f"Parameters: group={group}")

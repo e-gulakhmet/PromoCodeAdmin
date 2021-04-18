@@ -16,7 +16,7 @@ class Command(BaseCommand):
                             help="Количество новых кодов")
         parser.add_argument("-g",
                             "--group",
-                            type=Union[str, int],
+                            type=str,
                             help="Название группы, для которой будут созданы промокоды")
         parser.add_argument("-r",
                             "--recreate",
